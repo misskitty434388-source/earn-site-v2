@@ -69,5 +69,28 @@ def dashboard():
     conn.close()
     return render_template("dashboard.html", user=user)
 
+# -------- Watch Ad Page --------
+@app.route("/watch_ad")
+def watch_ad():
+    return render_template("watch_ad.html")
+
+
+# -------- Claim Reward --------
+@app.route("/claim_reward")
+def claim_reward():
+    conn = get_db()
+    cur = conn.cursor()
+
+    # আপাতত লাস্ট ইউজারের ব্যালেন্স বাড়াচ্ছি
+    cur.execute("""
+        UPDATE users
+        SET balance = balance + 5
+        WHERE id = (SELECT id FROM users ORDER BY id DESC LIMIT 1)
+    """)
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/dashboard")
 if __name__ == "__main__":
     app.run()
