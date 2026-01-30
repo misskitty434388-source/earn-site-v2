@@ -75,16 +75,27 @@ def dashboard():
 # -------- Watch Ad Page --------
 @app.route("/watch_ad")
 def watch_ad():
+    session["watch_start"] = time.time()   # ⏱️ timer start
     return render_template("watch_ad.html")
-
 
 # -------- Claim Reward --------
 @app.route("/claim_reward")
 def claim_reward():
+
+    if "watch_start" not in session:
+        return "❌ Ad দেখা হয়নি"
+
+    watched_time = time.time() - session["watch_start"]
+
+    if watched_time < 30:
+        return "⏳ 30 সেকেন্ড পূর্ণ হয়নি"
+
+    # ✅ timer clear
+    session.pop("watch_start", None)
+
     conn = get_db()
     cur = conn.cursor()
 
-    # আপাতত লাস্ট ইউজারের ব্যালেন্স বাড়াচ্ছি
     cur.execute("""
         UPDATE users
         SET balance = balance + 5
