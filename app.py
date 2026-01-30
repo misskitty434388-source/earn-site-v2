@@ -1,7 +1,10 @@
+from flask import Flask, render_template, request, redirect, session
+import time
 from flask import Flask, render_template, request, redirect
 import sqlite3
 
 app = Flask(__name__)
+app.secret_key = "secret123"
 
 # ---------- Database init ----------
 def init_db():
