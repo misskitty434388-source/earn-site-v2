@@ -12,11 +12,31 @@
 
 <br><br>
 
-<p>Wait 30 seconds, then claim reward</p>
+<p id="timer">⏳ Please wait 30 seconds...</p>
 
-<form method="POST" action="/claim_reward">
-    <button type="submit">✅ Claim Reward</button>
+<form method="GET" action="/claim_reward">
+    <button id="claimBtn" type="submit" disabled>
+        🔒 Claim Reward
+    </button>
 </form>
+
+<script>
+let timeLeft = 30;
+let timerText = document.getElementById("timer");
+let claimBtn = document.getElementById("claimBtn");
+
+let countdown = setInterval(() => {
+    timeLeft--;
+    timerText.innerText = "⏳ Wait " + timeLeft + " seconds";
+
+    if (timeLeft <= 0) {
+        clearInterval(countdown);
+        timerText.innerText = "✅ You can now claim reward";
+        claimBtn.disabled = false;
+        claimBtn.innerText = "✅ Claim Reward";
+    }
+}, 1000);
+</script>
 
 </body>
 </html>
